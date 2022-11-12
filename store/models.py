@@ -30,7 +30,7 @@ class Product(models.Model):
     title = models.CharField(max_length=255)
     slug = models.SlugField()
     description = models.TextField(null=True, blank=True)
-    price = models.DecimalField(
+    unit_price = models.DecimalField(
         max_digits=6,
         decimal_places=2,
         validators=[MinValueValidator(1)])
@@ -55,9 +55,6 @@ class Customer(models.Model):
     birth_date = models.DateField(null=True, blank=True)
     membership = models.CharField(
         max_length=1, choices=MEMBERSHIP_CHOICES, default=MEMBERSHIP_BUYERS)
-    user = models.OneToOneField(
-        settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
-
     user = models.OneToOneField(
         settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
 
@@ -105,13 +102,13 @@ class OrderItem(models.Model):
     product = models.ForeignKey(
         Product, on_delete=models.PROTECT, related_name='orderitems')
     quantity = models.PositiveSmallIntegerField()
-    price = models.DecimalField(max_digits=6, decimal_places=2)
+    unit_price = models.DecimalField(max_digits=6, decimal_places=2)
 
     def __str__(self):
         return f"{self.quantity} of {self.product.title}"
 
     def get_total_product_price(self):
-        return self.quantity * self.product.price
+        return self.quantity * self.product.unit_price
 
     def get_total_discount_product_price(self):
         return self.quantity * self.product.discount_price
@@ -183,7 +180,7 @@ class Cart(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)
 
 
-class CartItems(models.Model):
+class CartItem(models.Model):
     cart = models.ForeignKey(
         Cart, on_delete=models.CASCADE, related_name='items')
     product = models.ForeignKey(Product, on_delete=models.CASCADE)
@@ -248,9 +245,9 @@ class Refund(models.Model):
         return f"{self.pk}"
 
 
-def userprofile_receiver(sender, instance, created, *args, **kwargs):
-    if created:
-        userprofile = UserProfile.objects.create(user=instance)
+# def userprofile_receiver(sender, instance, created, *args, **kwargs):
+#     if created:
+#         userprofile = UserProfile.objects.create(user=instance)
 
 
-post_save.connect(userprofile_receiver, sender=settings.AUTH_USER_MODEL)
+# post_save.connect(userprofile_receiver, sender=settings.AUTH_USER_MODEL)
