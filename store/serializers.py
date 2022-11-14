@@ -1,11 +1,5 @@
-# from rest_framework import serializers
-
-# class ProductSerializers(serializers.Serializer):
-#     id = serializers.IntegerField()
-#     title = serializers.CharField( max_length = 256)
-#     unit_price = serializers.DecimalField( max_digits = 6,decimal_places = 2)
 from decimal import Decimal
-# from .models.user_model import User
+from .models import Customer
 from django.db import transaction
 from rest_framework import serializers
 from .signals import order_created
@@ -13,12 +7,9 @@ from .models import Cart, CartItem, Customer, Order, OrderItem, Product, Collect
 
 
 
-
-
-
 class RegisterSerializer(serializers.ModelSerializer):
     class Meta:
-        model = User
+        # model = User
         fields = ["email", "first_name", "last_name", "password"]
 
         # Prevents the password from showing after submission
@@ -223,3 +214,51 @@ class CreateOrderSerializer(serializers.Serializer):
 
             return order
 
+
+# class OrderSerilaizer(serializers.ModelSerializer):
+#     class Meta:
+#         model = Order
+
+
+# class Order(models.Model):
+#     user = models.ForeignKey(settings.AUTH_USER_MODEL,
+#                              on_delete=models.CASCADE)
+#     ref_code = models.CharField(max_length=20, blank=True, null=True)
+#     items = models.ManyToManyField(OrderItem)
+#     start_date = models.DateTimeField(auto_now_add=True)
+#     ordered_date = models.DateTimeField()
+#     ordered = models.BooleanField(default=False)
+#     shipping_address = models.ForeignKey(
+#         'Address', related_name='shipping_address', on_delete=models.SET_NULL, blank=True, null=True)
+#     billing_address = models.ForeignKey(
+#         'Address', related_name='billing_address', on_delete=models.SET_NULL, blank=True, null=True)
+#     payment = models.ForeignKey(
+#         'Payment', on_delete=models.SET_NULL, blank=True, null=True)
+#     coupon = models.ForeignKey(
+#         'Coupon', on_delete=models.SET_NULL, blank=True, null=True)
+#     being_delivered = models.BooleanField(default=False)
+#     received = models.BooleanField(default=False)
+#     refund_requested = models.BooleanField(default=False)
+#     refund_granted = models.BooleanField(default=False)
+
+#     '''
+#     1. Item added to cart
+#     2. Adding a billing address
+#     (Failed checkout)
+#     3. Payment
+#     (Preprocessing, processing, packaging etc.)
+#     4. Being delivered
+#     5. Received
+#     6. Refunds
+#     '''
+
+#     def __str__(self):
+#         return self.user.username
+
+#     def get_total(self):
+#         total = 0
+#         for order_item in self.items.all():
+#             total += order_item.get_final_price()
+#         if self.coupon:
+#             total -= self.coupon.amount
+#         return total
