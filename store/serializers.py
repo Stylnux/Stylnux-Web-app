@@ -6,47 +6,6 @@ from .signals import order_created
 from .models import Cart, CartItem, Customer, Order, OrderItem, Product, Collection, Review
 
 
-
-class RegisterSerializer(serializers.ModelSerializer):
-    class Meta:
-        # model = User
-        fields = ["email", "first_name", "last_name", "password"]
-
-        # Prevents the password from showing after submission
-        extra_kwargs = {"password": {"write_only": True}}
-
-    def create(self, validated_data):
-        new_user = User.objects.create(**validated_data)
-        new_user.set_password(validated_data["password"])
-
-        # Retrieve OTP from view
-        otp = self.context["otp"]
-        new_user.otp = otp
-        new_user.is_individual = True
-
-        new_user.save()
-        return new_user
-
-class ResetPasswordSerializer(serializers.Serializer):
-    new_password = serializers.CharField(max_length=40)
-    otp = serializers.CharField(max_length=6)
-    confirm_password = serializers.CharField(max_length=40)
-
-    def validate(self, attrs):
-        new_password = attrs.get('new_password')
-        confirm_password = attrs.get('confirm_password')
-        if new_password != confirm_password:
-            raise serializers.ValidationError('The new password must match the confirm password')
-        return attrs
-
-class ForgotPasswordSerializer(serializers.Serializer):
-    email = serializers.EmailField()
-
-
-class UserLoginSerializer(serializers.Serializer):
-    email = serializers.EmailField(max_length=255)
-    password = serializers.CharField()
-
 class CollectionSerializer(serializers.ModelSerializer):
     class Meta:
         model = Collection
@@ -213,7 +172,7 @@ class CreateOrderSerializer(serializers.Serializer):
             order_created.send_robust(self.__class__, order=order)
 
             return order
-
+#  class ReviewSerializer()
 
 # class OrderSerilaizer(serializers.ModelSerializer):
 #     class Meta:

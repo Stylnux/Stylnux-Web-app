@@ -1,21 +1,17 @@
-from django.db import models
-from django.core.validators import MinValueValidator
-from django.db.models.signals import post_save
-from django.conf import settings
 from django.contrib import admin
-# from django.contrib.auth.models import AbstractBaseUser,BaseUserManager,PermissionsMixin
-from django.shortcuts import reverse
+from django.conf import settings
+from django.core.validators import MinValueValidator
+from django.db import models
 from uuid import uuid4
-# from django_countries.fields import CountryField
 
 # Create your models here.
 class Promotion(models.Model):
-    description = models.CharField(max_length=225)
-    discount_price = models.FloatField()
+    description = models.CharField(max_length=255)
+    discount = models.FloatField()
 
 
 class Collection(models.Model):
-    title = models.CharField(max_length=225)
+    title = models.CharField(max_length=255)
     featured_product = models.ForeignKey(
         'Product', on_delete=models.SET_NULL, null=True, related_name='+', blank=True)
 
@@ -105,30 +101,12 @@ class OrderItem(models.Model):
     quantity = models.PositiveSmallIntegerField()
     unit_price = models.DecimalField(max_digits=6, decimal_places=2)
 
-    def __str__(self):
-        return f"{self.quantity} of {self.product.title}"
-
-    def get_total_product_price(self):
-        return self.quantity * self.product.unit_price
-
-    def get_total_discount_product_price(self):
-        return self.quantity * self.product.discount_price
-
-    def get_amount_saved(self):
-        return self.get_total_item_price() - self.get_total_discount_item_price()
-
-    def get_final_price(self):
-        if self.item.discount_price:
-            return self.get_total_discount_item_price()
-        return self.get_total_item_price()
 
 class Address(models.Model):
     street = models.CharField(max_length=255)
     city = models.CharField(max_length=255)
-    customer = models.OneToOneField(
-        Customer, on_delete=models.CASCADE, primary_key=True
-    )
-    zip = models.CharField(max_length=6, default=None)
+    customer = models.ForeignKey(
+        Customer, on_delete=models.CASCADE)
 
 
 class Cart(models.Model):
@@ -145,7 +123,15 @@ class CartItem(models.Model):
     )
 
     class Meta:
-        unique_together = [["cart", "product"]]
+        unique_together = [['cart', 'product']]
+
+
+class Review(models.Model):
+    product = models.ForeignKey(
+        Product, on_delete=models.CASCADE, related_name='reviews')
+    name = models.CharField(max_length=255)
+    description = models.TextField()
+    date = models.DateField(auto_now_add=True)
 
 
 # class Address(models.Model):
@@ -174,13 +160,6 @@ class CartItem(models.Model):
 
 #     def __str__(self):
 #         return self.user.username
-
-
-class Review(models.Model):
-    product = models.ForeignKey(Product, on_delete=models.CASCADE, related_name='reviews')
-    name = models.CharField(max_length=255)
-    description = models.TextField()
-    date = models.DateField(auto_now_add=True)
 
 
 class Coupon(models.Model):
