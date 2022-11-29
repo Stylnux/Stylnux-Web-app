@@ -5,14 +5,14 @@ databases:
 
 services:
   - type: web
-    name: mysite
+    name: ecom_app
     env: python
     buildCommand: "./build.sh"
-    startCommand: "gunicorn mysite.wsgi:application"
+    startCommand: "gunicorn ecom_app.wsgi:application"
     envVars:
       - key: DATABASE_URL
         fromDatabase:
-          name: mysite
+          name: ecom_app
           property: connectionString
       - key: SECRET_KEY
         generateValue: true
