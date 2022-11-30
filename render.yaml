@@ -1,7 +1,7 @@
 databases:
-  - name: mysite
-    databaseName: mysite
-    user: mysite
+  - name: ecom_app
+    databaseName: ecom_app
+    user: ecom_app
 
 services:
   - type: web

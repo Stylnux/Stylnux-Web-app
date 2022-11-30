@@ -51,6 +51,7 @@ INSTALLED_APPS = [
     "django_filters",
     "djoser",
     "rest_framework",
+    'drf_spectacular',
     # 'rest_framework.authtoken',
     #includedpapps
     "users",
@@ -102,8 +103,8 @@ DATABASES = {
     }
 }
 # DATABASES = {
-#     'default': dj_database_url.config(        # Feel free to alter this value to suit your needs.
-#     default='postgresql://postgres:postgres@localhost:5432/mysite',
+#     'default': dj_database_url.config( # Feel free to alter this value to suit your needs.
+#     default='postgresql://postgres:postgres@localhost:5432/ecom_app',
 #     conn_max_age=600    )}
 
 # DATABASES = {
@@ -161,6 +162,7 @@ MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 REST_FRAMEWORK = {
+    'DEFAULT_SCHEMA_CLASS': 'drf_spectacular.openapi.AutoSchema',
     'COERCE_DECIMAL_TO_STRING': False,
     'DEFAULT_AUTHENTICATION_CLASSES': (
         'rest_framework_simplejwt.authentication.JWTAuthentication',
@@ -224,3 +226,11 @@ EMAIL_HOST_PASSWORD = config("EMAIL_HOST_PASSWORD", default="dummy123")
 EMAIL_PORT = 587
 EMAIL_USE_TLS = True
 EMAIL_USE_SSL = False
+
+SPECTACULAR_SETTINGS = {
+    'TITLE': 'FashionEcommerce API',
+    'DESCRIPTION': 'An application where customers and retailers meet to sort out fashion business',
+    'VERSION': '1.0.0',
+    'SERVE_INCLUDE_SCHEMA': False,
+    # OTHER SETTINGS
+}
