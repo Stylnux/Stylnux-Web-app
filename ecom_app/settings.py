@@ -41,7 +41,6 @@ ALLOWED_HOSTS = ["*"]
 # Application definition
 
 INSTALLED_APPS = [
-    # 'render.apps.RenderConfig',
     "django.contrib.admin",
     "django.contrib.auth",
     "django.contrib.contenttypes",
@@ -52,10 +51,8 @@ INSTALLED_APPS = [
     "djoser",
     "rest_framework",
     'drf_spectacular',
-    # 'rest_framework.authtoken',
     #includedpapps
     "users",
-    # "products",
     "likes",
     "tags",
     "store",
@@ -110,7 +107,7 @@ DATABASES = {
         'USER': config('DB_USER'),
         'PASSWORD': config('DB_PASSWORD'),
         'HOST': config('DB_HOST'),
-        'PORT': config('DB_PORT'),
+        'PORT': config('DB_PORT')
     }
 }
 
