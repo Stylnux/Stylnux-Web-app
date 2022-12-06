@@ -9,6 +9,7 @@ https://docs.djangoproject.com/en/4.1/topics/settings/
 For the full list of settings and their values, see
 https://docs.djangoproject.com/en/4.1/ref/settings/
 """
+from decouple import config
 import os
 from datetime import timedelta
 from pathlib import Path
@@ -22,7 +23,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/4.1/howto/deployment/checklist/
 
-from decouple import config
+
 from django.core.management.utils import get_random_secret_key
 
 
@@ -113,11 +114,12 @@ DATABASES = {
     'default': {
         #'ENGINE': 'django.db.backends.sqlite3',
         'ENGINE': 'django.db.backends.postgresql',
-        'NAME': config('NAME'),
-        'USER': config('USER'),
-        'PASSWORD': config('PASSWORD'),
-        'HOST': config('HOST'),
-        'PORT': config('PORT'),
+        'NAME': config('db_NAME'),
+        'USER': config('db_USER'),
+        'PASSWORD': config('db_PASSWORD'),
+        'HOST': config('db_HOST'),
+        'PORT': config('db_PORT'),
+
     }
 }
 
