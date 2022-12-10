@@ -1,0 +1,9 @@
+.active-nav::after {
+  content: "";
+  display: block;
+  width: 3px;
+  height: 3px;
+  margin: auto;
+  border-radius: 50%;
+  background-color: rgba(0, 0, 0, 0.9);
+}
